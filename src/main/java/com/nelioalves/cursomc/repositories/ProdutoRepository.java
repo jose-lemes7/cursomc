@@ -1,5 +1,7 @@
 package com.nelioalves.cursomc.repositories;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +23,14 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 					"""
 			)
 	public Page<Produto>findAllWithCategoria(Pageable page) ;
+
+	@Query(
+			value = """
+					select p
+					from Produto p
+					left join fetch p.categorias c
+					where c.id = ?1
+					"""
+	)	
+	List<Produto> findByCat(Long id);
 }
