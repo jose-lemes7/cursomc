@@ -9,10 +9,15 @@ import org.springframework.context.annotation.Configuration;
 
 import com.nelioalves.cursomc.entities.Categoria;
 import com.nelioalves.cursomc.entities.Cidade;
+import com.nelioalves.cursomc.entities.Cliente;
+import com.nelioalves.cursomc.entities.Endereco;
 import com.nelioalves.cursomc.entities.Estado;
 import com.nelioalves.cursomc.entities.Produto;
+import com.nelioalves.cursomc.entities.enums.TipoCliente;
 import com.nelioalves.cursomc.repositories.CategoriaRepository;
 import com.nelioalves.cursomc.repositories.CidadeRepository;
+import com.nelioalves.cursomc.repositories.ClienteRepository;
+import com.nelioalves.cursomc.repositories.EnderecoRepository;
 import com.nelioalves.cursomc.repositories.EstadoRepository;
 import com.nelioalves.cursomc.repositories.ProdutoRepository;
 
@@ -21,12 +26,21 @@ public class LocalData {
 	
 	@Autowired
 	CategoriaRepository categoriaRepository;
+	
 	@Autowired
 	ProdutoRepository produtoRepository;
+	
 	@Autowired
 	CidadeRepository cidadeRepository;
+	
 	@Autowired
 	EstadoRepository estadoRepository;
+	
+	@Autowired
+	ClienteRepository clienteRepository;
+	
+	@Autowired
+	EnderecoRepository enderecoRepository;
 
 	@Bean
 	CommandLineRunner initDataase() {
@@ -59,6 +73,16 @@ public class LocalData {
 			estadoRepository.saveAll(Arrays.asList(est1, est2));
 			cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 			
+			Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PESSOAFISICA); 
+			cli1.getTelefones().addAll(Arrays.asList("3411223344", "3499887744"));
+			
+			Endereco e1 = new Endereco(null, "Rua Flores", " 300", "Apto 303", "Jardim", "38060123", cli1, c1);
+			Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38054000", cli1, c2);
+			
+			cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+			
+			clienteRepository.save(cli1);
+			enderecoRepository.saveAll(Arrays.asList(e1, e2));
 		};
 	}
 	
